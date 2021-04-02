@@ -171,6 +171,7 @@
         //  Obesity
         //  Smokers
     healthData.forEach(function(data) {
+        data.abbr=data.abbr;
         data.poverty = +data.poverty;
         data.age = +data.age;
         data.income = +data.income;
@@ -201,6 +202,7 @@
         //.attr("transform", "rotate(-90)")
         .call(leftAxis);
 
+    var abbrtext = (d) => {return d.abbr;};    
     // append initial circles
     var circlesGroup = chartGroup.selectAll("circle")
     .data(healthData)
@@ -211,6 +213,29 @@
     .attr("r", 20)
     .attr("fill", "pink")
     .attr("opacity", ".5");
+
+    circlesGroup
+    .data(healthData)
+    .enter()
+    .append("text")
+    .attr("class", "states")
+    .attr("x", d => xLinearScale(d[chosenXAxis]))
+    .attr("y", d => yLinearScale(d[chosenYAxis]))
+    .text(abbrtext);
+    console.log(abbrtext)
+
+     // append initial circles
+    // var circlesGroup = chartGroup.selectAll(".dot")
+    //  .data(healthData)
+    //  .enter();
+
+    //  circlesGroup
+    //  .append("circle")
+    //  .attr("cx", d => xLinearScale(d[chosenXAxis]))
+    //  .attr("cy", d => yLinearScale(d[chosenYAxis]))
+    //  .attr("r", 20)
+    //  .attr("fill", "pink")
+    //  .attr("opacity", ".5");
     
     // Create group for three x-axis labels
     // health data
@@ -310,10 +335,10 @@
             xAxis = renderXAxes(xLinearScale, xAxis);
 
             // updates circles with new x values
-            circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis);
+            circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
             // updates tooltips with new info
-            circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
+            circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
             // changes classes to change bold text
             if (chosenXAxis === "age") {
@@ -378,10 +403,10 @@
             yAxis = renderYAxes(yLinearScale, yAxis);
 
             // updates circles with new x values
-            circlesGroup = renderCircles(circlesGroup, yLinearScale, chosenYAxis);
+            circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
             // updates tooltips with new info
-            circlesGroup = updateToolTip(chosenYAxis, circlesGroup);
+            circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
             // changes classes to change bold text
             if (chosenYAxis === "obesity") {

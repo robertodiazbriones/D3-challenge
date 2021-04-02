@@ -27,10 +27,10 @@ var chartGroup = svg.append("g")
 // Initial Params
 //X:Poverty
 //  Age
-//  Household
+//  Income
 //Y:Healthcare
-//  Smokes
-//  Obese
+//  Obesity
+//  Smokers
 
 var chosenXAxis = "Poverty";
 var chosenYAxis = "Healthcare";
@@ -80,3 +80,74 @@ function renderYAxes(newYScale, yAxis) {
   
     return yAxis;
   }
+
+// function used for updating circles group with a transition to
+// new circles
+function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
+
+    circlesGroup.transition()
+      .duration(1000)
+      .attr("cx", d => newXScale(d[chosenXAxis]))
+      .attr("cy", d => newYScale(d[chosenYAxis]));
+  
+    return circlesGroup;
+  }
+
+// function used for updating circles group with new tooltip
+function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
+    // Initial Params
+    //X:Poverty
+    //  Age
+    //  Income
+    //Y:Healthcare
+    //  Obesity
+    //  Smokers
+
+    var Xlabel, Ylabel;
+  
+    if (chosenXAxis === "Povery") {
+      Xlabel = "Poverty:";
+    }
+    else if (chosenXAxis === "Age") {
+        Xlabel = "Age:";
+      }
+    else if (chosenXAxis === "Income") {
+        Xlabel = "income:";
+    }
+    else {
+      Xlabel = "X Error:";
+    }
+
+    if (chosenYAxis === "Healthcare") {
+        Ylabel = "Healthcare:";
+      }
+      else if (chosenYAxis === "Obesity") {
+          Ylabel = "Obesity:";
+        }
+      else if (chosenYAxis === "Smokers") {
+          Ylabel = "Smokers:";
+      }
+      else {
+        Ylabel = "Y Error:";
+      }
+  
+    var toolTip = d3.tip()
+      .attr("class", "tooltip")
+      .offset([80, -60])
+      .html(function(d) {
+        return (`${Xlabel} ${d[chosenXAxis]}<br>${Ylabel} ${d[chosenYAxis]}`);
+      });
+  
+    circlesGroup.call(toolTip);
+  
+    circlesGroup.on("mouseover", function(data) {
+      toolTip.show(data);
+    })
+      // onmouseout event
+      .on("mouseout", function(data, index) {
+        toolTip.hide(data);
+      });
+  
+    return circlesGroup;
+  }
+

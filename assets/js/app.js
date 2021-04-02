@@ -60,10 +60,10 @@
     function yScale(healthData, chosenYAxis) {
         // create scales
         var yLinearScale = d3.scaleLinear()
-        .domain([d3.min(healthData, d => d[chosenYAxis]) * 0.8,
-            d3.max(healthData, d => d[chosenYAxis]) * 1.2
+        .domain([d3.min(healthData, d => d[chosenYAxis]) * 1.0,
+            d3.max(healthData, d => d[chosenYAxis]) * 1.0
         ])
-        .range([0, width]);
+        .range([height, 0]);
     
         return yLinearScale;
     }
@@ -114,7 +114,7 @@
 
         var Xlabel, Ylabel;
     
-        if (chosenXAxis === "povery") {
+        if (chosenXAxis === "poverty") {
         Xlabel = "Poverty:";
         }
         else if (chosenXAxis === "age") {
@@ -294,11 +294,11 @@
         //  Age
         //  Income
     
-        var value = d3.select(this).attr("value");
-        if (value !== chosenXAxis) {
+        var xvalue = d3.select(this).attr("value");
+        if (xvalue !== chosenXAxis) {
 
             // replaces chosenXAxis with value
-            chosenXAxis = value;
+            chosenXAxis = xvalue;
 
             // console.log(chosenXAxis)
 
@@ -350,9 +350,11 @@
                 .classed("inactive", true);
             }  
         }
-        });
+    });
 
-        ylabelsGroup.selectAll("text")
+
+
+    ylabelsGroup.selectAll("text")
         .on("click", function() {
         // get value of selection
         // health data
@@ -360,11 +362,11 @@
         //  Obesity
         //  Smokers
     
-        var value = d3.select(this).attr("value");
-        if (value !== chosenYAxis) {
+        var yvalue = d3.select(this).attr("value");
+        if (yvalue !== chosenYAxis) {
 
             // replaces chosenXAxis with value
-            chosenYAxis = value;
+            chosenYAxis = yvalue;
 
             // console.log(chosenXAxis)
 
